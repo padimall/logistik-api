@@ -10,12 +10,22 @@ class ControllerProduct extends Controller
     public function index()
     {
         $data = Product::all();
+        if(is_null($data)){
+            return response()->json([
+                'message' => 'Resource not found!'
+            ],404);
+        }
         return response()->json($data,200);
     }
 
     public function show($id)
     {
         $data = Product::find($id);
+        if(is_null($data)){
+            return response()->json([
+                'message' => 'Resource not found!'
+            ],404);
+        }
         return response()->json($data,200);
     }
 
