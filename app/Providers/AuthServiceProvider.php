@@ -26,7 +26,10 @@ class AuthServiceProvider extends ServiceProvider
     {
         $this->registerPolicies();
         Passport::routes();
-
+        Passport::tokensCan([
+            'system-token' => 'Access all end point',
+            'user-token' => 'Access user only end point'
+        ]);
         //
     }
 }

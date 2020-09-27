@@ -14,12 +14,35 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+/*
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
+*/
+Route::group(['prefix' => 'v1'], function () {
+    Route::post('signup','AuthController@signup');
+    Route::post('login','AuthController@login');
+    Route::post('login-dev','AuthController@login_dev');
 
-Route::get('/product','ControllerProduct@index');
-Route::get('/product/{id}','ControllerProduct@show');
-Route::post('/product','ControllerProduct@store');
-Route::put('/product/{product}','ControllerProduct@update');
-Route::delete('/product/{id}','ControllerProduct@delete');
+    Route::group(['middleware' => ['auth:api','scopes:system-token,user-token']], function () {
+
+        Route::post('/user',function(){
+            return response()->json(request()->user());
+        });
+
+        Route::group(['prefix' => 'user'], function () {
+            Route::post('/update','AuthController@update');
+        });
+
+
+    });
+
+    Route::group(['middleware' => ['auth:api','scope:system-token']], function () {
+
+
+
+    });
+
+});
+
+
