@@ -10,6 +10,9 @@ $factory->define(Package::class, function (Faker $faker) {
         'user_id' => function(){
             return App\User::inRandomOrder()->pluck('id')->first();
         },
+        'service_id' => function(){
+            return App\Service::inRandomOrder()->pluck('id')->first();
+        },
         'type' => 'Makanan',
         'origin' => 'Medan',
         'sender' => $faker->name,

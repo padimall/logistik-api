@@ -16,6 +16,7 @@ class CreatePackagesTable extends Migration
         Schema::create('packages', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->uuid('user_id');
+            $table->uuid('service_id');
             $table->string('type');
             $table->string('origin');
             $table->string('sender');
@@ -31,6 +32,7 @@ class CreatePackagesTable extends Migration
             $table->integer('price');
             $table->timestamps();
             $table->foreign('user_id')->references('id')->on('users');
+            $table->foreign('service_id')->references('id')->on('services');
         });
     }
 

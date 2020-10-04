@@ -63,7 +63,6 @@ class AuthController extends Controller
         $request->validate([
             'email' => 'required|string|email',
             'password' => 'required|string',
-            'device_id' => 'required|string',
             'remember_me' => 'boolean'
         ]);
 
