@@ -23,18 +23,17 @@ class AuthController extends Controller
         $request->validate([
             'name' => 'required|string',
             'email' => 'required|string|email|unique:users',
-            'address' => 'required|string',
             'phone' => 'required|string|unique:users',
             'origin' => 'required|string',
             'destination' => 'required|string',
             'type' => 'required|string',
-            'password' => 'required|string|confirmed'
+            'password' => 'required|string|confirmed|min:8',
+
         ]);
 
         $user = new User([
             'name' => $request->name,
             'email' => $request->email,
-            'address' => $request->address,
             'phone' => $request->phone,
             'origin' => $request->origin,
             'destination' => $request->destination,
@@ -44,6 +43,7 @@ class AuthController extends Controller
         $user->save();
 
         return response()->json([
+            'status' => 1,
             'message' => 'Successfully created user!'
         ], 201);
     }
@@ -69,6 +69,7 @@ class AuthController extends Controller
         $credentials = request(['email', 'password']);
         if(!Auth::attempt($credentials))
             return response()->json([
+                'status' => 0,
                 'message' => 'Unauthorized'
             ], 401);
 
@@ -110,11 +111,13 @@ class AuthController extends Controller
         $credentials = request(['email', 'password']);
         if(!Auth::attempt($credentials))
             return response()->json([
+                'status' => 0,
                 'message' => 'Unauthorized'
             ], 401);
 
         if(hash('sha256',$request['keyword']) != 'c95f46c7236e806bf134ac4ebc372a8a0313845630ba7072b2ea743f8a030491'){
             return response()->json([
+                'status' => 0,
                 'message' => 'Unauthorized'
             ], 401);
         }
