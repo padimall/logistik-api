@@ -14,8 +14,9 @@ class PackageController extends Controller
         $data = DB::table('packages')
                 ->join('services','services.id','=','packages.service_id')
                 ->select('packages.*','services.name AS service_name')
+                ->where('packages.last_pick',request()->user()->id)
                 ->get();
-        // $data = Package::all();
+
         if(sizeOf($data)==0){
             return response()->json([
                 'status' => 0,
@@ -90,21 +91,31 @@ class PackageController extends Controller
 
         $data = $request->all();
         $data['user_id'] = request()->user()->id;
+        $data['last_pick'] = request()->user()->id;
         $data['origin'] = request()->user()->origin;
+
+
+
+        $resi = 'PL1602156904';
+        while(Package::where('no_resi',$resi)->first()){
+            $resi = 'PL'.strtotime(date('d-m-Y H:i:s'));
+        }
+        $data['no_resi'] = $resi;
         $response = Package::create($data);
 
         $trackingData = array(
             'package_id' => $response['id'],
             'user_id' => request()->user()->id,
             'location' => request()->user()->origin,
-            'detail' => 'Paket telah diterima di drop point di '.request()->user()->origin.' (PADISTIC: '.$response['id'].')',
+            'detail' => 'Paket telah diterima di drop point di '.request()->user()->origin.' (PADISTIC: '.$resi.')',
         );
 
         $saveTracking = Tracking::create($trackingData);
 
         return response()->json([
             'status' => 1,
-            'message' => 'Resource created!'
+            'message' => 'Resource created!',
+            'resi'=>$resi
         ],201);
     }
 
