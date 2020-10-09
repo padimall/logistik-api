@@ -57,6 +57,7 @@ Route::group(['prefix' => 'v1'], function () {
 
         Route::group(['prefix' => 'tracking'], function () {
             Route::post('/send','TrackingController@send');
+            Route::post('/mutiple-send','TrackingController@multiplesend');
             Route::post('/receive','TrackingController@receive');
             Route::post('/package','TrackingController@package');
             Route::post('/delete','TrackingController@delete');

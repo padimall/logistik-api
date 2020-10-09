@@ -32,6 +32,30 @@ class TrackingController extends Controller
         ],200);
     }
 
+    public function multiplesend(Request $request)
+    {
+        $request->validate([
+            'list' => 'required'
+        ]);
+
+        $list = $request['list'];
+
+        for($i=0; $i<sizeof($list); $i++){
+            $package = Package::where('no_resi',$list[$i])->first();
+            $data['package_id'] = $package['id'];
+            $data['user_id'] = request()->user()->id;
+            $data['location'] = request()->user()->origin;
+            $data['detail'] = 'Paket akan dikirimkan ke gateway di '.request()->user()->destination;
+            $response = Tracking::create($data);
+            $package->last_pick = NULL;
+            $package->save();
+        }
+        return response()->json([
+            'status' => 1,
+            'message' => 'Success!'
+        ],200);
+    }
+
     public function send(Request $request)
     {
         $request->validate([
