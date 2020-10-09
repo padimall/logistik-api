@@ -42,6 +42,10 @@ class TrackingController extends Controller
 
         for($i=0; $i<sizeof($list); $i++){
             $package = Package::where('no_resi',$list[$i])->first();
+            if($package['last_pick'] != request()->user()->id)
+            {
+                continue;
+            }
             $data['package_id'] = $package['id'];
             $data['user_id'] = request()->user()->id;
             $data['location'] = request()->user()->origin;
