@@ -184,11 +184,18 @@ class AuthController extends Controller
             $data->password = bcrypt($request['password']);
         }
 
-        if(!is_null($request['address'])){
+        if(!is_null($request['origin'])){
             $request->validate([
-                'address' => 'required'
+                'origin' => 'required'
             ]);
-            $data->address = $request['address'];
+            $data->origin = $request['origin'];
+        }
+
+        if(!is_null($request['type'])){
+            $request->validate([
+                'type' => 'required'
+            ]);
+            $data->type = $request['type'];
         }
 
         if(!is_null($request['phone'])){
