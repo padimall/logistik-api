@@ -33,6 +33,7 @@ Route::group(['prefix' => 'v1'], function () {
 
         Route::group(['prefix' => 'user'], function () {
             Route::post('/update','AuthController@update');
+            Route::post('/update-password','AuthController@update_password');
         });
 
         Route::group(['prefix' => 'dashboard'], function () {
@@ -54,6 +55,15 @@ Route::group(['prefix' => 'v1'], function () {
             Route::post('/store','ServiceController@store');
             Route::post('/update','ServiceController@update');
         });
+
+        Route::group(['prefix' => 'destination'], function () {
+            Route::post('/all','DestinationController@showAll');
+            Route::post('/detail','DestinationController@show');
+            Route::post('/store','DestinationController@store');
+            Route::post('/update','DestinationController@update');
+        });
+
+
 
         Route::group(['prefix' => 'tracking'], function () {
             Route::post('/send','TrackingController@send');

@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 use App\User;
+use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
 {
@@ -25,7 +26,6 @@ class AuthController extends Controller
             'email' => 'required|string|email|unique:users',
             'phone' => 'required|string|unique:users',
             'origin' => 'required|string',
-            'destination' => 'required|string',
             'type' => 'required|string',
             'password' => 'required|string|confirmed|min:8',
 
@@ -36,7 +36,6 @@ class AuthController extends Controller
             'email' => $request->email,
             'phone' => $request->phone,
             'origin' => $request->origin,
-            'destination' => $request->destination,
             'type' => $request->type,
             'password' => bcrypt($request->password)
         ]);
@@ -210,5 +209,32 @@ class AuthController extends Controller
             'status' => 1,
             'message' => 'Resource updated!'
         ],200);
+    }
+
+    public function update_password(Request $request)
+    {
+
+        $data = User::where('id',request()->user()->id)->first();
+
+        if(!is_null($request['old_password'])){
+            if(Hash::check($request['old_password'], $data->password)){
+                $request->validate([
+                    'password' => 'required|string|confirmed|min:8'
+                ]);
+                $data->password = bcrypt($request['password']);
+                $data->save();
+                return response()->json([
+                    'status' => 1,
+                    'message' => 'Password change!'
+                ],200);
+            }
+            else {
+                return response()->json([
+                    'status' => 0,
+                    'message' => 'Wrong old password!'
+                ],200);
+            }
+        }
+
     }
 }
