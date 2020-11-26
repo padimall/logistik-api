@@ -24,6 +24,10 @@ Route::group(['prefix' => 'v1'], function () {
     Route::post('login','AuthController@login');
     Route::post('login-dev','AuthController@login_dev');
 
+    Route::group(['prefix' => 'tracking'], function () {
+        Route::post('/package','TrackingController@package');
+    });
+
 
     Route::group(['middleware' => ['auth:api','scopes:system-token,user-token']], function () {
 
@@ -69,7 +73,6 @@ Route::group(['prefix' => 'v1'], function () {
             Route::post('/send','TrackingController@send');
             Route::post('/mutiple-send','TrackingController@multiplesend');
             Route::post('/receive','TrackingController@receive');
-            Route::post('/package','TrackingController@package');
             Route::post('/delete','TrackingController@delete');
         });
 
