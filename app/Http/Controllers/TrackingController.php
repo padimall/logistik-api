@@ -32,6 +32,35 @@ class TrackingController extends Controller
         ],200);
     }
 
+    public function package_public(Request $request)
+    {
+        $request->validate([
+            'target_id'=>'required|exists:packages,no_resi'
+        ]);
+
+        $package = Package::where('no_resi',$request['target_id'])->first();
+
+        $data = DB::table('trackings')
+                ->where('package_id',$package['id'])
+                ->select('location','detail','created_at')
+                ->get();
+
+        // $data = Tracking::where('package_id',$package['id'])->orderBy('created_at','DESC')->get();
+
+        if(is_null($data)){
+            return response()->json([
+                'status' => 0,
+                'message' => 'Resource not found!'
+            ],404);
+        }
+
+        return response()->json([
+            'status' => 1,
+            'message' => 'Resource found!',
+            'data' => $data
+        ],200);
+    }
+
     public function multiplesend(Request $request)
     {
         $request->validate([

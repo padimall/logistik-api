@@ -25,7 +25,7 @@ Route::group(['prefix' => 'v1'], function () {
     Route::post('login-dev','AuthController@login_dev');
 
     Route::group(['prefix' => 'tracking'], function () {
-        Route::post('/package','TrackingController@package');
+        Route::post('/package-public','TrackingController@package_public');
     });
 
 
@@ -74,6 +74,7 @@ Route::group(['prefix' => 'v1'], function () {
             Route::post('/mutiple-send','TrackingController@multiplesend');
             Route::post('/receive','TrackingController@receive');
             Route::post('/delete','TrackingController@delete');
+            Route::post('/package','TrackingController@package');
         });
 
 
