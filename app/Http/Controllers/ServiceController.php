@@ -83,8 +83,11 @@ class ServiceController extends Controller
 
     public function update(Request $request)
     {
+        $request->validate([
+            'target_id'=>'required|exists:services,id'
+        ]);
 
-        $data = Service::where('user_id',request()->user()->id)->first();
+        $data = Service::where('id',$request['target_id'])->first();
 
         if(!is_null($request['name'])){
             $request->validate([
@@ -93,11 +96,18 @@ class ServiceController extends Controller
             $data->name = $request['name'];
         }
 
-        if(!is_null($request['phone'])){
+        if(!is_null($request['detail'])){
             $request->validate([
-                'phone' => 'required|unique:Services,phone'
+                'detail' => 'required'
             ]);
-            $data->phone = $request['phone'];
+            $data->detail = $request['detail'];
+        }
+
+        if(!is_null($request['price'])){
+            $request->validate([
+                'price' => 'required|numeric'
+            ]);
+            $data->price = $request['price'];
         }
         $data->save();
         return response()->json([

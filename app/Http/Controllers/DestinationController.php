@@ -66,27 +66,31 @@ class DestinationController extends Controller
     public function update(Request $request)
     {
 
-        $data = Destination::where('user_id',request()->user()->id)->first();
+        $request->validate([
+            'target_id'=>'required|exists:destinations,id'
+        ]);
 
-        if(!is_null($request['name'])){
+        $data = Destination::where('id',$request['target_id'])->first();
+
+        if(!is_null($request['country'])){
             $request->validate([
-                'name' => 'required'
+                'country' => 'required'
             ]);
-            $data->name = $request['name'];
+            $data->country = $request['country'];
         }
 
-        if(!is_null($request['name'])){
+        if(!is_null($request['province'])){
             $request->validate([
-                'name' => 'required'
+                'province' => 'required'
             ]);
-            $data->name = $request['name'];
+            $data->province = $request['province'];
         }
 
-        if(!is_null($request['name'])){
+        if(!is_null($request['city'])){
             $request->validate([
-                'name' => 'required'
+                'city' => 'required'
             ]);
-            $data->name = $request['name'];
+            $data->city = $request['city'];
         }
 
         $data->save();
